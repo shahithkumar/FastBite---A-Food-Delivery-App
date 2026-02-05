@@ -6,6 +6,7 @@ import LottieView from 'lottie-react-native';
 import { useNavigation } from '@react-navigation/native';
 import useToast from '../../hooks/use-toast';
 import AppBar from '../../components/common/app-bar'
+import { API_URL } from '../../constants/config';
 
 export default function RegisterScreen(props) {
   const [name, setName] = useState("");
@@ -26,7 +27,7 @@ export default function RegisterScreen(props) {
       return;
     }
 
-    let response = await fetch("http://192.168.1.29:8080/api/register", {
+    let response = await fetch(API_URL + "register", {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

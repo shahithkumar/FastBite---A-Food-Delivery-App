@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
 import { ToastAndroid } from 'react-native';
+import { API_URL } from '../constants/config';
 
 export const AuthContext = React.createContext({
     user: undefined,
@@ -19,8 +20,7 @@ export const AuthProvider = ({ children }) => {
             user,
             type,
             login: async (email, password) => {
-                const url = "http://192.168.1.29:8080/api/";
-                let response = await fetch(url + "login", {
+                let response = await fetch(API_URL + "login", {
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'

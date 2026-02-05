@@ -1,12 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState, useEffect } from "react";
+import { API_URL } from "../constants/config";
 
 const useFetch = (params) => {
     const [status, setStatus] = useState('idle');
     const [data, setData] = useState([]);
     const [refetch, setRefetch] = useState(false)
 
-    const url = "http://192.168.1.29:8080/api/";
+    const url = API_URL;
 
     useEffect(() => {
         if (!params) return;

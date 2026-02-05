@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,9 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG") 
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ["localhost","10.0.2.2", "192.168.1.29"]
+ALLOWED_HOSTS = ["*"] # Updated for easier deployment, restrict this in real production.
 
 
 # Application definition
@@ -49,6 +50,7 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Static files helper
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,16 +89,12 @@ WSGI_APPLICATION = 'delivery_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# Use DATABASE_URL if available (Production), else use SQLite (Local)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get("db_name"),
-        'USER': os.environ.get("db_user"),
-        'PASSWORD': os.environ.get("db_pass"),
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
+    )
 }
 
 
@@ -137,3 +135,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
