@@ -45,3 +45,9 @@ def login(request):
         context["error"] = "Wrong Credentials"
         return Response(context, status.HTTP_401_UNAUTHORIZED)
 
+
+@api_view(["GET"])
+@permission_classes([])
+def root(request):
+    return Response({"message": "Welcome to FastBite API! The server is running successfully."}, status=status.HTTP_200_OK)
+
